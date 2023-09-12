@@ -29,6 +29,7 @@ public class MedicoController {
 
     @Autowired
     private MedicoRepository medicoRepository;
+
     @PostMapping
     public void registrarMedico(@RequestBody @Valid DatosRegistroMedico datosRegistroMedico){
         medicoRepository.save(new Medico(datosRegistroMedico));
@@ -39,9 +40,11 @@ public class MedicoController {
         return medicoRepository.findByActivoTrue(paginacion).map(DatosListadoMedico::new);
     }
 
+    @Transactional
     @PutMapping
-    public void actualizarMedico(DatosActualizarMedico datosActualizarMedico){
+    public void actualizarMedico(@RequestBody @Valid DatosActualizarMedico datosActualizarMedico) {
         Medico medico = medicoRepository.getReferenceById(datosActualizarMedico.id());
+        medico.actualizarDatos(datosActualizarMedico);
     }
 
     /*DELETE LOGICO */
